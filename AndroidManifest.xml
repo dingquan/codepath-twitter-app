@@ -39,9 +39,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="cprest"
+                    android:host="cpbasictwitterapp"
                     android:scheme="oauth" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.codepath.apps.twitterclient.TimelineActivity"
+            android:label="@string/title_activity_timeline" >
         </activity>
     </application>
 

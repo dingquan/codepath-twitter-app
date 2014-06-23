@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,7 +20,8 @@ import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TimelineActivity extends Activity {
-
+	private static final int REQUEST_CODE = 10;
+	
 	private TwitterClient twitterClient;
 	private List<Tweet> tweets;
 	private ArrayAdapter<Tweet> aTweets;
@@ -84,5 +90,42 @@ public class TimelineActivity extends Activity {
 			}
 			
 		});
+	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_compose, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    public void composeTweet(MenuItem mi){
+		Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+		startActivityForResult(i, REQUEST_CODE);
+    }
+    
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// REQUEST_CODE is defined above
+		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+			// Extract name value from result extras
+			String tweet = data.getExtras().getString("tweet");
+			// Toast the name to display temporarily on screen
+			// Toast.makeText(this, filterData, Toast.LENGTH_SHORT).show();
+			twitterClient.postTweet(tweet, new JsonHttpResponseHandler(){
+				@Override
+				public void onSuccess(int statusCode, JSONObject json) {
+					Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
+//					List<Tweet> newTweets = Tweet.fromJSONArray(json);
+//					aTweets.addAll(newTweets);
+//					updateTweetIdCounter(newTweets);
+				}
+				
+				@Override
+				public void onFailure(Throwable e, String s) {
+					super.onFailure(e, s);
+				}
+			});
+		}
 	}
 }

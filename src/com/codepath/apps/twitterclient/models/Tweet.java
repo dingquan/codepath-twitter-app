@@ -1,13 +1,16 @@
 package com.codepath.apps.twitterclient.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
+import android.text.format.DateUtils;
 
 public class Tweet {
 	private String body;
@@ -69,4 +72,21 @@ public class Tweet {
 		return body;
 	}
 
+	// getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
+	public String getRelativeTimeAgo() {
+		String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+		SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+		sf.setLenient(true);
+	 
+		String relativeDate = "";
+		try {
+			long dateMillis = sf.parse(createdAt).getTime();
+			relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+					System.currentTimeMillis(), DateUtils.FORMAT_ABBREV_ALL).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	 
+		return relativeDate;
+	}
 }

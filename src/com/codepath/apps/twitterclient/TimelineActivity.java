@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.activeandroid.util.Log;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -22,6 +21,9 @@ public class TimelineActivity extends Activity {
 	private ArrayAdapter<Tweet> aTweets;
 	private ListView lvTweets;
 	
+	private Long minId = Long.MAX_VALUE;
+	private Long maxId = 1L;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,42 +32,54 @@ public class TimelineActivity extends Activity {
 		twitterClient = TwitterApp.getRestClient();
 
 		populateTimeline();
-//		twitterClient.getTweetById("480479298403729408", new JsonHttpResponseHandler(){
-//			@Override
-//			public void onSuccess(int arg0, JSONObject arg1) {
-//				Toast.makeText(getBaseContext(), arg1.toString(), Toast.LENGTH_SHORT).show();
-//				Log.d("debug", "Response: " + arg1.toString());
-//				// TODO Auto-generated method stub
-//				super.onSuccess(arg0, arg1);
-//			}
-//			
-//			@Override
-//			public void onFailure(Throwable e, String s) {
-//				Log.d("debug", s);
-//			}
-//		});
 		
 		lvTweets = (ListView)findViewById(R.id.lvTweets);
 		tweets = new ArrayList<Tweet>();
 		aTweets = new TweetArrayAdapter(this, tweets);
 		lvTweets.setAdapter(aTweets);
+		
+		lvTweets.setOnScrollListener(new EndlessScrollListener(){
+
+			@Override
+			public void onLoadMore(int page, int totalItemsCount) {
+				// Triggered only when new data needs to be appended to the list
+				// Add whatever code is needed to append new items to your
+				// AdapterView
+				populateTimeline();
+			}
+			
+		});
+	}
+	
+
+	/*
+	 * Process the tweet IDs from newTweets and update the min and max of the tweet Id
+	 */
+	public void updateTweetIdCounter(List<Tweet> newTweets){
+		Long uid;
+		for (Tweet t : newTweets){
+			uid = t.getUid();
+			if (uid < minId){
+				minId = uid;
+			}
+			if (uid > maxId){
+				maxId = uid;
+			}
+		}
 	}
 	
 	public void populateTimeline(){
-		twitterClient.getHomeTimeline(new JsonHttpResponseHandler(){
+		twitterClient.getHomeTimeline(minId, maxId, new JsonHttpResponseHandler(){
 			@Override
 			public void onSuccess(int statusCode, JSONArray json) {
-//				Toast.makeText(getBaseContext(), "Success: " + json.toString(), Toast.LENGTH_SHORT).show();
-				Log.e("debug", json.toString());
-				aTweets.addAll(Tweet.fromJSONArray(json));
+//				Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
+				List<Tweet> newTweets = Tweet.fromJSONArray(json);
+				aTweets.addAll(newTweets);
+				updateTweetIdCounter(newTweets);
 			}
 			
 			@Override
 			public void onFailure(Throwable e, String s) {
-//				Toast.makeText(getBaseContext(), "Fail: " + s.toString(), Toast.LENGTH_SHORT).show();
-				// TODO Auto-generated method stub
-				Log.e("debug", e.toString());
-				Log.e(s, e);
 				super.onFailure(e, s);
 			}
 			

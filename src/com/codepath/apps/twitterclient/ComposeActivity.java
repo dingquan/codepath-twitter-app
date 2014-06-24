@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +25,7 @@ public class ComposeActivity extends Activity {
 	private TextView tvScreenName;
 	private TextView tvUserName;
 	private EditText etTweet;
+	private Menu menu;
 	
 	private User user;
 	
@@ -43,6 +46,30 @@ public class ComposeActivity extends Activity {
 		tvScreenName = (TextView) findViewById(R.id.tvScreenName);
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
 		etTweet = (EditText) findViewById(R.id.etTweet);
+		etTweet.addTextChangedListener(new TextWatcher(){
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				//get remaining number of characters allowed and display it in the action bar
+				Integer remainCount = 140 - s.length();
+				MenuItem miCount = menu.findItem(R.id.remain_count);
+				miCount.setTitle(remainCount.toString());
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		String profileStr = prefs.getString("userProfile", "");
 		if (profileStr == null || profileStr.isEmpty()){
@@ -64,6 +91,7 @@ public class ComposeActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_tweet, menu);
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
     

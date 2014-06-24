@@ -132,7 +132,6 @@ public class TimelineActivity extends Activity {
 			twitterClient.postTweet(tweetStr, new JsonHttpResponseHandler(){
 				@Override
 				public void onSuccess(int statusCode, JSONObject json) {
-//					Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
 					Tweet tweet = Tweet.fromJSON(json);
 					aTweets.insert(tweet, 0);
 				}

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-<!--      <item android:id="@+id/action_compose"
-        android:icon="@drawable/ic_action_tweet"
-        android:onClick="postTweet"
+
+    <item
+        android:id="@+id/remain_count"
         android:menuCategory="system"
-        android:showAsAction="ifRoom"
-        android:title="@string/compose">
-    </item> -->
+        android:onClick="postTweet"
+        android:showAsAction="ifRoom|withText"
+        android:title="140"/>
     <item
         android:id="@+id/tweet"
-        android:showAsAction="ifRoom|withText"
         android:menuCategory="system"
         android:onClick="postTweet"
-        android:title="TWEET"/>
+        android:showAsAction="ifRoom|withText"
+        android:title="@+string/tweet"/>
+
 </menu>

@@ -9,6 +9,8 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#55acee</item>
+        <item name="android:showDividers">beginning</item>
+        <item name="android:divider">#FF00FF</item>
     </style>
 
 </resources>

@@ -127,16 +127,14 @@ public class TimelineActivity extends Activity {
     
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// REQUEST_CODE is defined above
 		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-			// Extract name value from result extras
-			String tweet = data.getExtras().getString("tweet");
-			// Toast the name to display temporarily on screen
-			// Toast.makeText(this, filterData, Toast.LENGTH_SHORT).show();
-			twitterClient.postTweet(tweet, new JsonHttpResponseHandler(){
+			String tweetStr = data.getExtras().getString("tweet");
+			twitterClient.postTweet(tweetStr, new JsonHttpResponseHandler(){
 				@Override
 				public void onSuccess(int statusCode, JSONObject json) {
-					Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
+//					Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
+					Tweet tweet = Tweet.fromJSON(json);
+					aTweets.insert(tweet, 0);
 				}
 				
 				@Override

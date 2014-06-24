@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TimelineActivity extends Activity {
@@ -27,6 +30,8 @@ public class TimelineActivity extends Activity {
 	private ArrayAdapter<Tweet> aTweets;
 	private ListView lvTweets;
 	
+	private SharedPreferences prefs;
+	
 	private Long minId = Long.MAX_VALUE;
 	private Long maxId = 1L;
 	
@@ -34,10 +39,11 @@ public class TimelineActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
-		
+		prefs = this.getSharedPreferences("com.codepath.twitterclient", Context.MODE_PRIVATE);
 		twitterClient = TwitterApp.getRestClient();
 
 		populateTimeline();
+		saveLoginUserProfileData();
 		
 		lvTweets = (ListView)findViewById(R.id.lvTweets);
 		tweets = new ArrayList<Tweet>();
@@ -92,6 +98,21 @@ public class TimelineActivity extends Activity {
 		});
 	}
 	
+    private void saveLoginUserProfileData(){
+		twitterClient.getUserProfile(new JsonHttpResponseHandler(){
+			@Override
+			public void onSuccess(int statusCode, JSONObject json) {
+				User user = User.fromJSON(json);
+				prefs.edit().putString("userProfile", JsonUtil.toJson(user)).commit();
+			}
+			
+			@Override
+			public void onFailure(Throwable e, String s) {
+				super.onFailure(e, s);
+			}
+			
+		});
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -116,9 +137,6 @@ public class TimelineActivity extends Activity {
 				@Override
 				public void onSuccess(int statusCode, JSONObject json) {
 					Toast.makeText(getBaseContext(), json.toString(), Toast.LENGTH_SHORT).show();
-//					List<Tweet> newTweets = Tweet.fromJSONArray(json);
-//					aTweets.addAll(newTweets);
-//					updateTweetIdCounter(newTweets);
 				}
 				
 				@Override

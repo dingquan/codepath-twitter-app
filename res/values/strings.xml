@@ -3,12 +3,12 @@
 
     <string name="app_name">Basic Twitter</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_photos">Flickr Photos</string>
     <string name="login_label">Connect To Twitter</string>
     <string name="title_activity_timeline"></string>
     <string name="prifile_image">Profile Image</string>
     <string name="compose">compose</string>
-    <string name="title_activity_compose">ComposeActivity</string>
+    <string name="title_activity_compose"></string>
+    <string name="tweet">TWEET</string>
 
 </resources>

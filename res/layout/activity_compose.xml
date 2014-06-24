@@ -23,32 +23,15 @@
         android:text="Foo"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvScreenName"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvScreenName"
-        android:paddingLeft="5dp"
-        android:text="\@foo"
-        android:textColor="#909090" />
-
-    <TextView
-        android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvScreenName"
-        android:layout_below="@+id/tvUserName"
-        android:padding="5dp"
-        android:text="Tweet Body" />
-
     <EditText
         android:id="@+id/etTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ivProfileImage"
-        android:layout_below="@+id/tvBody"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvUserName"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:ems="10"
         android:paddingLeft="5dp" >
@@ -56,12 +39,14 @@
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/btnOk"
+    <TextView
+        android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/etTweet"
-        android:layout_toRightOf="@+id/etTweet"
-        android:text="Tweet" />
+        android:layout_alignBottom="@+id/ivProfileImage"
+        android:layout_alignLeft="@+id/tvScreenName"
+        android:paddingLeft="5dp"
+        android:text="\@foo"
+        android:textColor="#909090" />
 
 </RelativeLayout>

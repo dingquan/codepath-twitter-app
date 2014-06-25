@@ -4,6 +4,7 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -36,15 +37,20 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
-//		params.put("count", "10");
-		//skip the since_id and max_id parameters for the first call (maxId would have the initial value of 1L)
-//		if(maxId.equals(1L)){
-//			params.put("since_id", maxId.toString());
-//		}
-		if (!maxId.equals(1L)) {
-			params.put("max_id", Long.valueOf(minId - 1).toString());
+
+		if (minId != null){
+			if (!minId.equals(Long.MAX_VALUE)) {
+				params.put("max_id", Long.valueOf(minId - 1).toString());
+			}
+			else{
+				params.put("since_id", "1");
+			}
 		}
-		client.get(apiUrl, null, handler);
+		if (maxId != null){
+			params.put("since_id",  maxId.toString());
+		}
+		Log.d("DEBUG", "apiURl: " + apiUrl + "params: " + params.toString());
+		client.get(apiUrl, params, handler);
     }
     
     public void getTweetById(String id, AsyncHttpResponseHandler handler){

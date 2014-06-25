@@ -1,12 +1,24 @@
 package com.codepath.apps.twitterclient.models;
 
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+@Table(name = "users")
+public class User extends Model {
+	@Column
 	private String name;
+	@Column
 	private long uid;
+	@Column
 	private String screenName;
+	@Column
 	private String profileImageUrl;
 
 	public static User fromJSON(JSONObject json) {
@@ -37,6 +49,14 @@ public class User {
 
 	public String getProfileImageUrl() {
 		return profileImageUrl;
+	}
+
+	public static User findById(Long id){
+		return new Select().from(User.class).where("id = ?", id).executeSingle();
+	}
+	
+	public static List<User> findAll(){
+		return new Select().from(User.class).orderBy("uid").execute();
 	}
 
 }

@@ -39,6 +39,8 @@ public class ComposeActivity extends Activity {
 		prefs = this.getSharedPreferences("com.codepath.twitterclient", Context.MODE_PRIVATE);
 		twitterClient = TwitterApp.getRestClient();
 		setupviews();
+		setupHandlers();
+		loadLoginUserData();
 	}
 	
     private void setupviews() {
@@ -46,6 +48,9 @@ public class ComposeActivity extends Activity {
 		tvScreenName = (TextView) findViewById(R.id.tvScreenName);
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
 		etTweet = (EditText) findViewById(R.id.etTweet);
+	}
+    
+    private void setupHandlers(){
 		etTweet.addTextChangedListener(new TextWatcher(){
 
 			@Override
@@ -70,13 +75,15 @@ public class ComposeActivity extends Activity {
 				
 			}
 		});
-		
-		String profileStr = prefs.getString("userProfile", "");
-		if (profileStr == null || profileStr.isEmpty()){
+    }
+    
+    private void loadLoginUserData(){
+		Long userId = prefs.getLong("userId", -1L);
+		if (userId == null || userId.equals(-1L)){
 			Log.e("ERROR", "profile data not availabel");
 		}
 		else{
-			user = (User) JsonUtil.fromJson(profileStr, User.class);
+			user = (User) User.findById(userId);
 			ivProfileImage.setImageResource(android.R.color.transparent);
 			ImageLoader imageLoader = ImageLoader.getInstance();
 			imageLoader.displayImage(user.getProfileImageUrl(), ivProfileImage);
@@ -84,7 +91,7 @@ public class ComposeActivity extends Activity {
 			tvScreenName.setText(user.getScreenName());
 			tvUserName.setText("@" + user.getName());
 		}
-	}
+    }
 
     
 	@Override

@@ -12,10 +12,22 @@ import org.json.JSONObject;
 
 import android.text.format.DateUtils;
 
-public class Tweet {
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Column.ForeignKeyAction;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
+@Table(name="tweets")
+public class Tweet extends Model{
+	@Column
 	private String body;
-	private long uid;
+	@Column(unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+	private Long uid;
+	@Column
 	private String createdAt;
+	@Column(onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
 	private User user;
 
 	public static Tweet fromJSON(JSONObject json){
@@ -88,5 +100,25 @@ public class Tweet {
 		}
 	 
 		return relativeDate;
+	}
+	
+	public static Tweet findById(Long id){
+		return new Select().from(Tweet.class).where("id = ?", id).executeSingle();
+	}
+	
+	public static List<Tweet> findAll(){
+		return new Select().from(Tweet.class).orderBy("uid").execute();
+	}
+	
+	public static void saveAll(List<Tweet> tweets){
+		ActiveAndroid.beginTransaction();
+		try {
+			for (Tweet tweet: tweets) {
+				tweet.save();
+			}
+			ActiveAndroid.setTransactionSuccessful();
+		} finally {
+			ActiveAndroid.endTransaction();
+		}
 	}
 }

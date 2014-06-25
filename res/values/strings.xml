@@ -10,5 +10,6 @@
     <string name="compose">compose</string>
     <string name="title_activity_compose"></string>
     <string name="tweet">TWEET</string>
+    <string name="tweet_hint">Dump your brain here.</string>
 
 </resources>

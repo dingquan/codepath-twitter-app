@@ -52,8 +52,7 @@ public class TimelineActivity extends Activity {
 		
 		setupHandlers();
 		saveLoginUserProfileData();
-//		fetchingSavedTweets();
-//		refreshTimeline();
+		fetchingSavedTweets();
 	}
 	
 	private void setupHandlers(){
@@ -81,7 +80,14 @@ public class TimelineActivity extends Activity {
 	}
 	
 	private void fetchingSavedTweets(){
-		aTweets.addAll(Tweet.findAll());
+		List<Tweet> savedTweets = Tweet.findAll();
+		if (savedTweets != null || savedTweets.isEmpty()){
+			for (Tweet tweet : savedTweets){
+				User user = User.findById(tweet.getUserId());
+				tweet.setUser(user);
+			}
+			aTweets.addAll(savedTweets);
+		}
 	}
 	
 	public void refreshTimeline(){
@@ -198,10 +204,6 @@ public class TimelineActivity extends Activity {
 	
 	private void saveTweets(){
 		Tweet.saveAll(tweets);
-		Toast.makeText(this, "Tweets saved", Toast.LENGTH_SHORT).show();
 	}
-	
-	private List<Tweet> loadTweets(){
-		return Tweet.findAll();
-	}
+
 }

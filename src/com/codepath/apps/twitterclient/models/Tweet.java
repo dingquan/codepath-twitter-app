@@ -27,8 +27,10 @@ public class Tweet extends Model{
 	private Long uid;
 	@Column
 	private String createdAt;
-	@Column(onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
+	@Column(name = "User", onUpdate = ForeignKeyAction.CASCADE, onDelete = ForeignKeyAction.CASCADE)
 	private User user;
+	@Column
+	private Long userId;
 
 	public static Tweet fromJSON(JSONObject json){
 		Tweet tweet = new Tweet();
@@ -37,6 +39,7 @@ public class Tweet extends Model{
 			tweet.uid = json.getLong("id");
 			tweet.createdAt = json.getString("created_at");
 			tweet.user = User.fromJSON(json.getJSONObject("user"));
+			tweet.userId = tweet.user.getUid();
 		}catch(JSONException e){
 			e.printStackTrace();
 			return null;
@@ -80,6 +83,14 @@ public class Tweet extends Model{
 		return user;
 	}
 	
+	public void setUser(User user){
+		this.user = user;
+	}
+	
+	public Long getUserId(){
+		return userId;
+	}
+	
 	public String toString(){
 		return body;
 	}
@@ -115,6 +126,7 @@ public class Tweet extends Model{
 		try {
 			for (Tweet tweet: tweets) {
 				tweet.save();
+				tweet.user.save();
 			}
 			ActiveAndroid.setTransactionSuccessful();
 		} finally {

@@ -103,8 +103,11 @@ public class TimelineActivity extends Activity {
 			@Override
 			public void onSuccess(int statusCode, JSONArray json) {
 				List<Tweet> newTweets = Tweet.fromJSONArray(json);
-				aTweets.addAll(newTweets);
-				saveTweets();
+				//want to keep the new tweets at the front, so we do this swap
+				saveTweets(newTweets);
+				newTweets.addAll(tweets);
+				tweets = newTweets;
+				aTweets.notifyDataSetChanged();
 			}
 			
 			@Override
@@ -135,8 +138,8 @@ public class TimelineActivity extends Activity {
 			@Override
 			public void onSuccess(int statusCode, JSONArray json) {
 				List<Tweet> newTweets = Tweet.fromJSONArray(json);
+				saveTweets(newTweets);
 				aTweets.addAll(newTweets);
-				saveTweets();
 			}
 			
 			@Override
@@ -202,8 +205,7 @@ public class TimelineActivity extends Activity {
 		}
 	}
 	
-	private void saveTweets(){
+	private void saveTweets(List<Tweet> tweets){
 		Tweet.saveAll(tweets);
 	}
-
 }

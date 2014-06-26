@@ -95,7 +95,6 @@ public class Tweet extends Model{
 		return body;
 	}
 
-	// getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
 	public String getRelativeTimeAgo() {
 		String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 		SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -118,17 +117,15 @@ public class Tweet extends Model{
 	}
 	
 	public static List<Tweet> findAll(){
-		return new Select().from(Tweet.class).orderBy("uid").execute();
+		return new Select().from(Tweet.class).orderBy("uid DESC").execute();
 	}
 	
 	public static void saveAll(List<Tweet> tweets){
 		ActiveAndroid.beginTransaction();
 		try {
 			for (Tweet tweet: tweets) {
-				if (Tweet.findById(tweet.getUid()) == null)
-					tweet.save();
-				if (User.findById(tweet.user.getUid()) == null)
-					tweet.user.save();
+				tweet.user.save();
+				tweet.save();
 			}
 			ActiveAndroid.setTransactionSuccessful();
 		} finally {

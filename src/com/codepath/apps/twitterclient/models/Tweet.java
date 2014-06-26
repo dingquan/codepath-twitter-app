@@ -125,8 +125,10 @@ public class Tweet extends Model{
 		ActiveAndroid.beginTransaction();
 		try {
 			for (Tweet tweet: tweets) {
-				tweet.save();
-				tweet.user.save();
+				if (Tweet.findById(tweet.getUid()) == null)
+					tweet.save();
+				if (User.findById(tweet.user.getUid()) == null)
+					tweet.user.save();
 			}
 			ActiveAndroid.setTransactionSuccessful();
 		} finally {

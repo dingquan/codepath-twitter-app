@@ -103,7 +103,7 @@ public class Tweet extends Model{
 	}
 	
 	public static Tweet findById(Long id){
-		return new Select().from(Tweet.class).where("id = ?", id).executeSingle();
+		return new Select().from(Tweet.class).where("uid = ?", id).executeSingle();
 	}
 	
 	public static List<Tweet> findAll(){

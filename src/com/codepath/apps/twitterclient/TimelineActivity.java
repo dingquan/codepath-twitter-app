@@ -98,8 +98,6 @@ public class TimelineActivity extends Activity {
 			public void onSuccess(int statusCode, JSONArray json) {
 				List<Tweet> newTweets = Tweet.fromJSONArray(json);
 				aTweets.addAll(newTweets);
-//				updateTweetIdCounter(newTweets);
-				Log.d("DEBUG", "maxId: " + newTweets.get(newTweets.size()-1).getUid());
 				saveTweets();
 			}
 			
@@ -132,7 +130,6 @@ public class TimelineActivity extends Activity {
 			public void onSuccess(int statusCode, JSONArray json) {
 				List<Tweet> newTweets = Tweet.fromJSONArray(json);
 				aTweets.addAll(newTweets);
-				Log.d("DEBUG", "maxId: " + newTweets.get(newTweets.size()-1).getUid());
 				saveTweets();
 			}
 			
@@ -157,6 +154,7 @@ public class TimelineActivity extends Activity {
 			public void onSuccess(int statusCode, JSONObject json) {
 				User user = User.fromJSON(json);
 				prefs.edit().putLong("userId", user.getUid()).commit();
+				user.save();
 			}
 			
 			@Override
@@ -166,6 +164,7 @@ public class TimelineActivity extends Activity {
 			
 		});
     }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -14,7 +14,7 @@ import com.activeandroid.query.Select;
 public class User extends Model {
 	@Column
 	private String name;
-	@Column
+	@Column(unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
 	private long uid;
 	@Column
 	private String screenName;
@@ -52,7 +52,7 @@ public class User extends Model {
 	}
 
 	public static User findById(Long id){
-		return new Select().from(User.class).where("id = ?", id).executeSingle();
+		return new Select().from(User.class).where("uid = ?", id).executeSingle();
 	}
 	
 	public static List<User> findAll(){

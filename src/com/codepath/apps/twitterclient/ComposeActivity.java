@@ -84,6 +84,9 @@ public class ComposeActivity extends Activity {
 		}
 		else{
 			user = (User) User.findById(userId);
+			if (user == null){
+				Log.e("ERROR", "Can't find user with userId=" + userId);
+			}
 			ivProfileImage.setImageResource(android.R.color.transparent);
 			ImageLoader imageLoader = ImageLoader.getInstance();
 			imageLoader.displayImage(user.getProfileImageUrl(), ivProfileImage);

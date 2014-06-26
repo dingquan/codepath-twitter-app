@@ -33,6 +33,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
+        android:maxLength="140"
         android:ems="10"
         android:hint="@string/tweet_hint"
         android:paddingLeft="5dp" >

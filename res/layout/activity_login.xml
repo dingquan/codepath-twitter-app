@@ -8,12 +8,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginActivity" >
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+
+    <ImageButton
+        android:id="@+id/twitterLogin"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
         android:onClick="loginToRest"
-        android:text="@string/login_label" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:src="@drawable/twitter_login_button" />
 
 </RelativeLayout>

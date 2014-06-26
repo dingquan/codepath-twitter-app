@@ -11,5 +11,8 @@
     <string name="title_activity_compose"></string>
     <string name="tweet">TWEET</string>
     <string name="tweet_hint">Dump your brain here.</string>
+    <string name="reply">Reply</string>
+    <string name="retweet">Retweet</string>
+    <string name="favorite">Favorite</string>
 
 </resources>
